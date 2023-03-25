@@ -5,4 +5,5 @@ class Config {
   static const String apiURL = "thefridgelist.herokuapp.com";
   static const String loginAPI = "/api/login";
   static const String registerAPI = "/api/addUser";
+  static const String addTaskAPI = "/api/addTask";
 }

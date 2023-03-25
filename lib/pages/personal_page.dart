@@ -46,6 +46,19 @@ class _PersonalPageState extends State<PersonalPage> {
               ],
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 25),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xff9736c5),
+                textStyle: TextStyle(fontSize: 20),
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, "/addTask");
+              },
+              child: const Text('Create New Task'),
+            ),
+          ),
           Container(
             decoration: BoxDecoration(
               color: Color.fromARGB(240, 245, 249, 255),
@@ -58,18 +71,7 @@ class _PersonalPageState extends State<PersonalPage> {
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: 50, minWidth: 355),
               child: Column(
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xff9736c5),
-                      textStyle: TextStyle(fontSize: 20),
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/addTask");
-                    },
-                    child: const Text('Create New Task'),
-                  ),
-                ],
+                children: [],
               ),
             ),
           )

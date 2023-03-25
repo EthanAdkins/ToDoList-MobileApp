@@ -2,9 +2,19 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:fridge_app/config.dart';
+import 'package:fridge_app/models/addTask_request_model.dart';
+import 'package:fridge_app/services/api_service.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
+import 'package:intl/intl.dart';
+
+DateTime now = new DateTime.now();
+DateTime dateTime =
+    new DateTime(now.year, now.month, now.day, now.hour, now.minute);
+
+DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
 
 class addTaskPage extends StatefulWidget {
   const addTaskPage({super.key});
@@ -38,7 +48,7 @@ class _addTaskPageState extends State<addTaskPage> {
             body: ProgressHUD(
               child: Form(
                 key: globalFormKey,
-                child: _registerUI(context),
+                child: _addTaskUI(context),
               ),
               inAsyncCall: isAPIcallProcess,
               opacity: 0.3,
@@ -46,7 +56,9 @@ class _addTaskPageState extends State<addTaskPage> {
             )));
   }
 
-  Widget _registerUI(BuildContext context) {
+  Widget _addTaskUI(BuildContext context) {
+    final hours = dateTime.hour.toString().padLeft(2, '0');
+    final minutes = dateTime.minute.toString().padLeft(2, '0');
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -91,7 +103,117 @@ class _addTaskPageState extends State<addTaskPage> {
             height: 20,
           ),
           Padding(
+            padding: const EdgeInsets.only(left: 20, bottom: 10),
+            child: Wrap(children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 13, right: 5),
+                child: Text('Date:',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17,
+                      color: Colors.white,
+                    )),
+              ),
+              ElevatedButton(
+                child:
+                    Text('${dateTime.month}/${dateTime.day}/${dateTime.year}'),
+                onPressed: () async {
+                  final date = await pickDate();
+                  if (date == null) {
+                    return;
+                  } // pressed "CANCEL"
+
+                  final newDateTime = DateTime(
+                    date.year,
+                    date.month,
+                    date.day,
+                    dateTime.hour,
+                    dateTime.minute,
+                  );
+
+                  setState(() => dateTime = newDateTime); // pressed "OK"
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: HexColor("#9736C5"),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 13, right: 5, left: 10),
+                child: Text('Time:',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17,
+                      color: Colors.white,
+                    )),
+              ),
+              ElevatedButton(
+                child: Text('$hours:$minutes'),
+                onPressed: () async {
+                  final time = await pickTime();
+                  if (time == null) return; // pressed "CANCEL"
+
+                  final newDateTime = DateTime(
+                    dateTime.year,
+                    dateTime.month,
+                    dateTime.day,
+                    time.hour,
+                    time.minute,
+                  );
+
+                  setState(() => dateTime = newDateTime); // Pressed "OK"
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: HexColor("#9736C5"),
+                ),
+              ),
+            ]),
+          ),
+          /*
+          Padding(
             padding: const EdgeInsets.only(left: 30, bottom: 20),
+            child: ElevatedButton(
+              child: Text('${dateTime.month}/${dateTime.day}/${dateTime.year}'),
+              onPressed: () async {
+                final date = await pickDate();
+                if (date == null) return; // pressed "CANCEL"
+                final newDateTime = DateTime(
+                  dateTime.year,
+                  dateTime.month,
+                  dateTime.day,
+                  dateTime.hour,
+                  dateTime.minute,
+                );
+
+                setState(() => dateTime = newDateTime); // pressed "OK"
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: HexColor("#9736C5"),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 30, bottom: 20),
+            child: ElevatedButton(
+              child: Text('$hours:$minutes'),
+              onPressed: () async {
+                final time = await pickTime();
+                if (time == null) return; // pressed "CANCEL"
+                final newDateTime = DateTime(
+                  dateTime.year,
+                  dateTime.month,
+                  dateTime.day,
+                  time.hour,
+                  time.minute,
+                );
+                setState(() => dateTime = newDateTime); // Pressed "OK"
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: HexColor("#9736C5"),
+              ),
+            ),
+          ),*/
+          Padding(
+            padding: const EdgeInsets.only(left: 20, bottom: 20),
             child: DropdownButton(
                 value: curList,
                 dropdownColor: Color(0xffa5b2df),
@@ -110,7 +232,47 @@ class _addTaskPageState extends State<addTaskPage> {
             child: FormHelper.submitButton(
               "CONFIRM",
               () {
-                print(curList);
+                if (validateAndSave()) {
+                  setState(() {
+                    isAPIcallProcess = true;
+                  });
+                  String stringDate = dateFormat.format(dateTime);
+                  AddTaskRequestModel model = AddTaskRequestModel(
+                    taskContent: task!,
+                    time: stringDate!,
+                    category: curList!,
+                  );
+                  APIService.addTask(model).then((response) {
+                    setState(() {
+                      isAPIcallProcess = false;
+                    });
+                    if (response.error == "") {
+                      FormHelper.showSimpleAlertDialog(
+                        context,
+                        Config.appName,
+                        "Task Added Successfully!",
+                        "OK",
+                        () {
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/personal',
+                            (route) => false,
+                          );
+                        },
+                      );
+                    } else {
+                      FormHelper.showSimpleAlertDialog(
+                        context,
+                        Config.appName,
+                        response.error,
+                        "OK",
+                        () {
+                          Navigator.pop(context);
+                        },
+                      );
+                    }
+                  });
+                }
               },
               btnColor: HexColor("#9736C5"),
               borderColor: Colors.white,
@@ -124,5 +286,25 @@ class _addTaskPageState extends State<addTaskPage> {
         ],
       ),
     );
+  }
+
+  Future<DateTime?> pickDate() => showDatePicker(
+        context: context,
+        initialDate: dateTime,
+        firstDate: now,
+        lastDate: DateTime(2100),
+      );
+  Future<TimeOfDay?> pickTime() => showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: dateTime.hour, minute: dateTime.minute));
+
+  bool validateAndSave() {
+    final form = globalFormKey.currentState;
+    if (form!.validate()) {
+      form.save();
+      return true;
+    } else {
+      return false;
+    }
   }
 }
