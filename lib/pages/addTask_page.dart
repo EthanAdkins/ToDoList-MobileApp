@@ -239,8 +239,8 @@ class _addTaskPageState extends State<addTaskPage> {
                   String stringDate = dateFormat.format(dateTime);
                   AddTaskRequestModel model = AddTaskRequestModel(
                     taskContent: task!,
-                    time: stringDate!,
-                    category: curList!,
+                    time: stringDate,
+                    category: curList,
                   );
                   APIService.addTask(model).then((response) {
                     setState(() {
