@@ -103,23 +103,21 @@ class _PersonalPageState extends State<PersonalPage> {
 
               child: ConstrainedBox(
                 constraints: BoxConstraints(minHeight: 50, minWidth: 355),
-                child: Expanded(
-                  child: ListView.separated(
-                    physics: ClampingScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.all(10),
-                    itemCount: entries.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        height: 70,
-                        color: Colors.purple,
-                        child: Center(child: Text('Entry ${entries[index]}')),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const Divider(),
-                  ),
+                child: ListView.separated(
+                  physics: ClampingScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.all(10),
+                  itemCount: entries.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      height: 70,
+                      color: Colors.purple,
+                      child: Center(child: Text('Entry ${entries[index]}')),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(),
                 ),
               ),
             ),
