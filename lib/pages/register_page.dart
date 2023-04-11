@@ -31,9 +31,9 @@ class _RegisterPageState extends State<RegisterPage> {
   String? checkPassword;
 
   // Regex for password
-  RegExp regex =
+  RegExp passwordRegex =
       RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{2,20}$');
-
+  RegExp emailRegex = RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)');
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -131,7 +131,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 if (onValidateVal.isEmpty) {
                   return "Password can\'t be empty.";
                 }
-                if (!regex.hasMatch(onValidateVal)) {
+                if (!passwordRegex.hasMatch(onValidateVal)) {
                   return "Password must meet the requirements";
                 }
                 return null;
@@ -169,7 +169,6 @@ class _RegisterPageState extends State<RegisterPage> {
               'Confirm Password',
               (onValidateVal) {
                 if (onValidateVal != checkPassword) {
-                  print(password);
                   return "Passwords must match";
                 }
                 return null;
@@ -265,6 +264,9 @@ class _RegisterPageState extends State<RegisterPage> {
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
                   return "Email can\'t be empty.";
+                }
+                if (!emailRegex.hasMatch(onValidateVal)) {
+                  return "Please enter a valid email";
                 }
                 return null;
               },

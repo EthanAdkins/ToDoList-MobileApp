@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fridge_app/pages/login_page.dart';
 import 'package:fridge_app/pages/register_page.dart';
 import 'package:fridge_app/pages/personal_page.dart';
+import 'package:fridge_app/pages/resetPassword_page.dart';
 import 'package:fridge_app/pages/school_page.dart';
 import 'package:fridge_app/pages/work_page.dart';
 import 'package:fridge_app/pages/addTask_page.dart';
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
         '/work': (context) => const WorkPage(),
         '/school': (context) => const SchoolPage(),
         '/addTask': (context) => const addTaskPage(),
+        '/forgotPassword': (context) => const resetPasswordPage(),
       },
     );
   }

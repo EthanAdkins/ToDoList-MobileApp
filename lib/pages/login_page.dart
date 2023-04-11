@@ -157,14 +157,14 @@ class _LoginPageState extends State<LoginPage> {
                   style: const TextStyle(color: Colors.grey, fontSize: 14.0),
                   children: <TextSpan>[
                     TextSpan(
-                      text: 'Forget Password ?',
+                      text: 'Forgot Password ?',
                       style: TextStyle(
                         color: Colors.white,
                         decoration: TextDecoration.underline,
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          print("Forget Password");
+                          Navigator.pushNamed(context, "/forgotPassword");
                         },
                     ),
                   ],
@@ -258,6 +258,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
+          ),
+          SizedBox(
+            height: 40,
           ),
         ],
       ),
