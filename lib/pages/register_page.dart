@@ -28,6 +28,10 @@ class _RegisterPageState extends State<RegisterPage> {
   String? firstName;
   String? lastName;
 
+  // Regex for password
+  RegExp regex =
+      RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{2,20}$');
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -122,7 +126,10 @@ class _RegisterPageState extends State<RegisterPage> {
               'Password',
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return "Username can\'t be empty.";
+                  return "Password can\'t be empty.";
+                }
+                if (!regex.hasMatch(onValidateVal)) {
+                  return "Password must meet the requirements";
                 }
                 return null;
               },
@@ -150,6 +157,15 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10, left: 50),
+            child: Text(
+                "• Must be between 2 and 20 characters\n• Must contain at least one number\n• Must contain at least one uppercase letter\n• Must contain at least one lowercase letter\n• Must contain at least one special character",
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.white,
+                )),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 10),
