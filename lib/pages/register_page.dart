@@ -21,12 +21,14 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   bool isAPIcallProcess = false;
   bool hidePassword = true;
+  bool hidePassword2 = false;
   GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   String? username;
   String? password;
   String? email;
   String? firstName;
   String? lastName;
+  String? checkPassword;
 
   // Regex for password
   RegExp regex =
@@ -125,6 +127,7 @@ class _RegisterPageState extends State<RegisterPage> {
               'password',
               'Password',
               (onValidateVal) {
+                checkPassword = onValidateVal;
                 if (onValidateVal.isEmpty) {
                   return "Password can\'t be empty.";
                 }
@@ -154,6 +157,42 @@ class _RegisterPageState extends State<RegisterPage> {
                 color: Colors.white.withOpacity(0.7),
                 icon: Icon(
                   hidePassword ? Icons.visibility_off : Icons.visibility,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: FormHelper.inputFieldWidget(
+              context,
+              'confirmPassword',
+              'Confirm Password',
+              (onValidateVal) {
+                if (onValidateVal != checkPassword) {
+                  print(password);
+                  return "Passwords must match";
+                }
+                return null;
+              },
+              (onSavedVal) {},
+              prefixIcon: const Icon(Icons.lock),
+              showPrefixIcon: true,
+              borderFocusColor: Colors.white,
+              prefixIconColor: Colors.white,
+              borderColor: Colors.white,
+              textColor: Colors.white,
+              hintColor: Colors.white.withOpacity(0.7),
+              borderRadius: 10,
+              obscureText: hidePassword2,
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setState(() {
+                    hidePassword2 = !hidePassword2;
+                  });
+                },
+                color: Colors.white.withOpacity(0.7),
+                icon: Icon(
+                  hidePassword2 ? Icons.visibility_off : Icons.visibility,
                 ),
               ),
             ),
