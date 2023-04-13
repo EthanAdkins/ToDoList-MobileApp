@@ -7,10 +7,15 @@ import 'package:fridge_app/pages/school_page.dart';
 import 'package:fridge_app/pages/work_page.dart';
 import 'package:fridge_app/pages/addTask_page.dart';
 import 'package:fridge_app/services/api_service.dart';
+import 'package:fridge_app/services/notifi_service.dart';
 import 'package:fridge_app/services/shared_service.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 Widget _defaultHome = const LoginPage();
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  NotificationService().initNotification();
+  tz.initializeTimeZones();
   /*
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -125,7 +130,12 @@ class DrawerCodeOnly extends StatelessWidget {
               // Update the state of the app
               // ...
               // Then close the drawer
-
+              GlobalData.email = "";
+              GlobalData.firstName = "";
+              GlobalData.lastName = "";
+              GlobalData.id = "";
+              GlobalData.userName = "";
+              GlobalData.password = "";
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 '/',

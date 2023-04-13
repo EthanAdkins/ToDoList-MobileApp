@@ -241,6 +241,7 @@ class _addTaskPageState extends State<addTaskPage> {
                     taskContent: task!,
                     time: stringDate,
                     category: curList,
+                    user: GlobalData.userName!,
                   );
                   APIService.addTask(model).then((response) {
                     setState(() {

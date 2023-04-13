@@ -192,6 +192,7 @@ class _LoginPageState extends State<LoginPage> {
                       isAPIcallProcess = false;
                     });
                     if (response) {
+                      GlobalData.userName = username;
                       Navigator.pushNamedAndRemoveUntil(
                           context, '/personal', (route) => false);
                     } else {

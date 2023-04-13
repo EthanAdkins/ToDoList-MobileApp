@@ -69,8 +69,8 @@ class _resetPasswordPageState extends State<resetPasswordPage> {
               Align(
                 alignment: Alignment.center,
                 child: Image.asset(
-                  "assets/images/ToDoListPurple.png",
-                  width: 250,
+                  "assets/images/WingedEmail.png",
+                  width: 280,
                   fit: BoxFit.contain,
                 ),
               )
