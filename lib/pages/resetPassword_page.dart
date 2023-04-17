@@ -165,6 +165,17 @@ class _resetPasswordPageState extends State<resetPasswordPage> {
           SizedBox(
             height: 40,
           ),
+          Center(
+            child: FormHelper.submitButton(
+              "RESET PASSWORD",
+              () {},
+              width: 190,
+              btnColor: HexColor("#9736C5"),
+              borderColor: Colors.white,
+              txtColor: Colors.white,
+              borderRadius: 10,
+            ),
+          ),
         ],
       ),
     );

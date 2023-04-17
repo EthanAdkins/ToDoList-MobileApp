@@ -171,6 +171,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 if (onValidateVal != checkPassword) {
                   return "Passwords must match";
                 }
+                if (onValidateVal == "") {
+                  return "Password can't be empty";
+                }
                 return null;
               },
               (onSavedVal) {},

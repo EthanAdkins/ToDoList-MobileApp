@@ -1,3 +1,5 @@
+import 'package:auto_size_text/auto_size_text.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -23,10 +25,10 @@ class PersonalPage extends StatefulWidget {
 
 class _PersonalPageState extends State<PersonalPage> {
   final List<String> entries = <String>[
-    'A',
-    'B',
-    'C',
-    'A',
+    'I have a test due and must get my chores done/wash the Testing',
+    'Test Task',
+    'The fitness gram pacer test is a ... nevermind',
+    'wowowowowowowowowoowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowwowowowowowowowowoowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowow',
     'B',
     'C',
     'A',
@@ -36,6 +38,8 @@ class _PersonalPageState extends State<PersonalPage> {
     'B',
     'C'
   ];
+  GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
+  String searchValue = '';
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -67,7 +71,7 @@ class _PersonalPageState extends State<PersonalPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 25),
+              padding: const EdgeInsets.only(bottom: 20),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xff9736c5),
@@ -77,6 +81,28 @@ class _PersonalPageState extends State<PersonalPage> {
                   Navigator.pushNamed(context, "/addTask");
                 },
                 child: const Text('Create New Task'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 25),
+              child: FormHelper.inputFieldWidget(
+                context,
+                'search',
+                'Search',
+                (onValidateVal) {
+                  return null;
+                },
+                (onSavedVal) {
+                  searchValue = onSavedVal;
+                },
+                prefixIcon: const Icon(Icons.search),
+                showPrefixIcon: true,
+                borderFocusColor: Color(0xff9736c5),
+                prefixIconColor: Color(0xff9736c5),
+                borderColor: Color(0xff9736c5),
+                textColor: Color(0xff9736c5),
+                hintColor: Color(0xff9736c5).withOpacity(0.7),
+                borderRadius: 10,
               ),
             ),
             Container(
@@ -121,15 +147,37 @@ class _PersonalPageState extends State<PersonalPage> {
                         children: [
                           Expanded(
                             child: Center(
-                                child: Text(
-                              'Entry ${entries[index]}',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
+                                child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: 10,
+                                    bottom: 3,
+                                    left: 15,
+                                  ),
+                                  child: AutoSizeText(
+                                    'Entry ${entries[index]}',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                    maxLines: 3,
+                                    minFontSize: 8,
+                                    maxFontSize: 30,
+                                  ),
+                                ),
+                                AutoSizeText(
+                                  'Due Date: 4/12/23 4:23 PM',
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    fontSize: 10,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
                             )),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 10),
+                            padding: const EdgeInsets.only(right: 10, left: 10),
                             child: SizedBox(
                               width: 40,
                               height: 40,
@@ -144,14 +192,16 @@ class _PersonalPageState extends State<PersonalPage> {
                                     ),
                                   ),
                                   onPressed: () async {
+                                    // Check here if the date is in the future. Message if now
+                                    //if (date > or whatever DateTime now = new DateTime.now(); )
                                     if (await confirm(
                                       context,
                                       content: const Text(
                                           'Would you like to be reminded when your task is due?'),
                                     )) {
                                       DateTime dateTimeTEST = dateFormat
-                                          .parse("2023-04-11 01:07:00");
-                                      debugPrint('Notification Scheduled for ');
+                                          .parse("2023-04-13 00:56:00");
+
                                       NotificationService()
                                           .scheduleNotification(
                                               title: 'Wow',
@@ -204,5 +254,15 @@ class _PersonalPageState extends State<PersonalPage> {
         ),
       ),
     );
+  }
+
+  bool validateAndSave() {
+    final form = globalFormKey.currentState;
+    if (form!.validate()) {
+      form.save();
+      return true;
+    } else {
+      return false;
+    }
   }
 }
