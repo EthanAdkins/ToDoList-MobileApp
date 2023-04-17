@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fridge_app/pages/login_page.dart';
 import 'package:fridge_app/pages/register_page.dart';
 import 'package:fridge_app/pages/personal_page.dart';
+import 'package:fridge_app/pages/resetPasswordInApp_page.dart';
 import 'package:fridge_app/pages/resetPassword_page.dart';
 import 'package:fridge_app/pages/school_page.dart';
 import 'package:fridge_app/pages/work_page.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
         '/school': (context) => const SchoolPage(),
         '/addTask': (context) => const addTaskPage(),
         '/forgotPassword': (context) => const resetPasswordPage(),
+        '/resetPasswordInApp': (context) => const resetPasswordInAppPage(),
       },
     );
   }
@@ -121,6 +123,25 @@ class DrawerCodeOnly extends StatelessWidget {
               // Then close the drawer
               Navigator.pop(context);
               Navigator.pushNamed(context, "/school");
+            },
+          ),
+          const Divider(color: Colors.black54),
+          ListTile(
+            title: const Text('About Us'),
+            onTap: () {
+              // Update the state of the app
+              // ...
+              // Then close the drawer
+            },
+          ),
+          ListTile(
+            title: const Text('Change Password'),
+            onTap: () {
+              // Update the state of the app
+              // ...
+              // Then close the drawer
+              Navigator.pop(context);
+              Navigator.pushNamed(context, "/resetPasswordInApp");
             },
           ),
           const Divider(color: Colors.black54),
