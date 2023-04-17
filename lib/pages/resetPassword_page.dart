@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:fridge_app/models/register_request_model.dart';
+import 'package:fridge_app/models/resetPassword_request_model.dart';
+import 'package:fridge_app/models/resetPassword_response_model.dart';
+import 'package:fridge_app/models/sendEmail_request_model.dart';
+import 'package:fridge_app/models/sendEmail_response_model.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
@@ -24,6 +28,7 @@ class _resetPasswordPageState extends State<resetPasswordPage> {
   String? username;
   String? email;
   String? confirmEmail;
+  String? newPass;
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +173,71 @@ class _resetPasswordPageState extends State<resetPasswordPage> {
           Center(
             child: FormHelper.submitButton(
               "RESET PASSWORD",
-              () {},
+              () {
+                if (validateAndSave()) {
+                  setState(() {
+                    isAPIcallProcess = true;
+                  });
+                  SendEmailRequestModel model = SendEmailRequestModel(
+                    user: username!,
+                    email: email!,
+                  );
+                  APIService.sendEmail(model).then((response) {
+                    setState(() {
+                      isAPIcallProcess = false;
+                    });
+                    if (response.newPassword != "") {
+                      newPass = response.newPassword;
+                      ResetPasswordRequestModel model =
+                          ResetPasswordRequestModel(
+                        user: username!,
+                        password: response.password,
+                        newPassword: newPass!,
+                      );
+                      APIService.resetPassword(model).then((response) {
+                        setState(() {
+                          isAPIcallProcess = false;
+                        });
+                        if (response.error == '') {
+                          FormHelper.showSimpleAlertDialog(
+                            context,
+                            Config.appName,
+                            "Email has been sent",
+                            "OK",
+                            () {
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                '/login',
+                                (route) => false,
+                              );
+                            },
+                          );
+                        } else {
+                          FormHelper.showSimpleAlertDialog(
+                            context,
+                            Config.appName,
+                            "ERROR!!!",
+                            "OK",
+                            () {
+                              Navigator.pop(context);
+                            },
+                          );
+                        }
+                      });
+                    } else {
+                      FormHelper.showSimpleAlertDialog(
+                        context,
+                        Config.appName,
+                        "ERROR!!!",
+                        "OK",
+                        () {
+                          Navigator.pop(context);
+                        },
+                      );
+                    }
+                  });
+                }
+              },
               width: 190,
               btnColor: HexColor("#9736C5"),
               borderColor: Colors.white,

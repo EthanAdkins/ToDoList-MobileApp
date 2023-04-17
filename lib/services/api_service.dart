@@ -7,6 +7,10 @@ import 'package:fridge_app/models/login_request_model.dart';
 import 'package:fridge_app/models/login_response_model.dart';
 import 'package:fridge_app/models/register_request_model.dart';
 import 'package:fridge_app/models/register_response_model.dart';
+import 'package:fridge_app/models/resetPassword_request_model.dart';
+import 'package:fridge_app/models/resetPassword_response_model.dart';
+import 'package:fridge_app/models/sendEmail_request_model.dart';
+import 'package:fridge_app/models/sendEmail_response_model.dart';
 import 'package:fridge_app/services/shared_service.dart';
 
 import 'package:http/http.dart' as http;
@@ -73,6 +77,34 @@ class APIService {
       body: jsonEncode(model.toJson()),
     );
     return addTaskResponseModel(response.body);
+  }
+
+  static Future<SendEmailResponseModel> sendEmail(
+      SendEmailRequestModel model) async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+    var url = Uri.http(Config.apiURL, Config.sendEmailAPI);
+    var response = await client.post(
+      url,
+      headers: requestHeaders,
+      body: jsonEncode(model.toJson()),
+    );
+    return sendEmailResponseModel(response.body);
+  }
+
+  static Future<ResetPasswordResponseModel> resetPassword(
+      ResetPasswordRequestModel model) async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+    var url = Uri.http(Config.apiURL, Config.resetPasswordAPI);
+    var response = await client.post(
+      url,
+      headers: requestHeaders,
+      body: jsonEncode(model.toJson()),
+    );
+    return resetPasswordResponseModel(response.body);
   }
 
 /*
