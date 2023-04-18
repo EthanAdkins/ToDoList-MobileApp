@@ -32,10 +32,15 @@ class _PersonalPageState extends State<PersonalPage> {
 
   @override
   void initState() {
+    setState(() {
+      isAPIcallProcess = true;
+    });
     SearchTaskRequestModel model = SearchTaskRequestModel(
       user: GlobalData.userName,
       search: "Personal",
     );
+    print(GlobalData.userName);
+
     APIService.searchTask(model).then((response) {
       setState(() {
         isAPIcallProcess = false;
@@ -47,8 +52,6 @@ class _PersonalPageState extends State<PersonalPage> {
         print("error");
       }
     });
-
-    super.initState();
   }
 
   int count = 5;

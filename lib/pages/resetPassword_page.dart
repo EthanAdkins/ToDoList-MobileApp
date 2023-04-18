@@ -216,7 +216,7 @@ class _resetPasswordPageState extends State<resetPasswordPage> {
                           FormHelper.showSimpleAlertDialog(
                             context,
                             Config.appName,
-                            "ERROR!!!",
+                            "Email or User Not Found",
                             "OK",
                             () {
                               Navigator.pop(context);

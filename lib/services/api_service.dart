@@ -168,10 +168,10 @@ class APIService {
 }
 
 class GlobalData {
-  static String? id;
-  static String? firstName;
-  static String? lastName;
-  static String? userName;
-  static String? password;
-  static String? email;
+  static String? id = "";
+  static String? firstName = "";
+  static String? lastName = "";
+  static String? userName = "";
+  static String? password = "";
+  static String? email = "";
 }

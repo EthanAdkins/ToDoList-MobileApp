@@ -19,6 +19,18 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  @override
+  void initState() {
+    GlobalData.email = "";
+    GlobalData.firstName = "";
+    GlobalData.lastName = "";
+    GlobalData.id = "";
+    GlobalData.userName = "";
+    GlobalData.password = "";
+
+    super.initState();
+  }
+
   bool isAPIcallProcess = false;
   bool hidePassword = true;
   GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();

@@ -32,6 +32,9 @@ class _SchoolPageState extends State<SchoolPage> {
 
   @override
   void initState() {
+    setState(() {
+      isAPIcallProcess = true;
+    });
     SearchTaskRequestModel model = SearchTaskRequestModel(
       user: GlobalData.userName,
       search: "School",
@@ -47,8 +50,6 @@ class _SchoolPageState extends State<SchoolPage> {
         print("error");
       }
     });
-
-    super.initState();
   }
 
   int count = 5;

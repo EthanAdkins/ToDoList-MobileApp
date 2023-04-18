@@ -32,6 +32,9 @@ class _WorkPageState extends State<WorkPage> {
 
   @override
   void initState() {
+    setState(() {
+      isAPIcallProcess = true;
+    });
     SearchTaskRequestModel model = SearchTaskRequestModel(
       user: GlobalData.userName,
       search: "Work",
@@ -47,8 +50,6 @@ class _WorkPageState extends State<WorkPage> {
         print("error");
       }
     });
-
-    super.initState();
   }
 
   int count = 5;
