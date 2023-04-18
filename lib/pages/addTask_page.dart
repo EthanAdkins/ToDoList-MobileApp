@@ -256,7 +256,7 @@ class _addTaskPageState extends State<addTaskPage> {
                         () {
                           Navigator.pushNamedAndRemoveUntil(
                             context,
-                            '/personal',
+                            '/${curList.toLowerCase()}',
                             (route) => false,
                           );
                         },
