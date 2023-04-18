@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:fridge_app/models/delTask_request_model.dart';
 import 'package:fridge_app/models/searchTask_request_model.dart';
 import 'package:fridge_app/pages/addTask_page.dart';
 import 'package:fridge_app/pages/work_page.dart';
@@ -16,6 +17,7 @@ import 'package:fridge_app/main.dart';
 import 'dart:convert';
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:intl/intl.dart';
+import 'package:fridge_app/config.dart';
 
 class PersonalPage extends StatefulWidget {
   const PersonalPage({super.key});
@@ -32,7 +34,7 @@ class _PersonalPageState extends State<PersonalPage> {
   void initState() {
     SearchTaskRequestModel model = SearchTaskRequestModel(
       user: GlobalData.userName,
-      search: "personal",
+      search: "Personal",
     );
     APIService.searchTask(model).then((response) {
       setState(() {
@@ -276,8 +278,9 @@ class _PersonalPageState extends State<PersonalPage> {
                                   dateFormat.parse(changeableList[index][1]);
 
                               NotificationService().scheduleNotification(
-                                  title: 'Wow',
-                                  body: 'That worked',
+                                  title: 'The Fridge List',
+                                  body:
+                                      'Your task: "${changeableList[index][0]}" is due!',
                                   scheduledNotificationDateTime: dateTimeTEST);
                             } else {
                               return print("not confirm");
@@ -303,7 +306,49 @@ class _PersonalPageState extends State<PersonalPage> {
                               content: const Text('Confirm delete task?'),
                               textOK: const Text('Delete'),
                             )) {
-                              return print("confirm");
+                              if (validateAndSave()) {
+                                setState(() {
+                                  isAPIcallProcess = true;
+                                });
+
+                                DelTaskRequestModel model = DelTaskRequestModel(
+                                  taskContent: entries[index][0],
+                                  time: entries[index][1],
+                                  category: "Personal",
+                                  user: GlobalData.userName!,
+                                );
+                                APIService.delTask(model).then((response) {
+                                  setState(() {
+                                    isAPIcallProcess = false;
+                                  });
+                                  if (response.error == "") {
+                                    FormHelper.showSimpleAlertDialog(
+                                      context,
+                                      Config.appName,
+                                      "Task deleted Successfully!",
+                                      "OK",
+                                      () {
+                                        Navigator.pushNamedAndRemoveUntil(
+                                          context,
+                                          '/personal',
+                                          (route) => false,
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    FormHelper.showSimpleAlertDialog(
+                                      context,
+                                      Config.appName,
+                                      response.error,
+                                      "OK",
+                                      () {
+                                        Navigator.pop(context);
+                                      },
+                                    );
+                                  }
+                                });
+                              }
+                              return;
                             }
                             return print("not confirm");
                           },

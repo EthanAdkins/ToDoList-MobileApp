@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:fridge_app/config.dart';
 import 'package:fridge_app/models/addTask_request_model.dart';
 import 'package:fridge_app/models/addTask_response_model.dart';
+import 'package:fridge_app/models/delTask_request_model.dart';
+import 'package:fridge_app/models/delTask_response_model.dart';
 import 'package:fridge_app/models/login_request_model.dart';
 import 'package:fridge_app/models/login_response_model.dart';
 import 'package:fridge_app/models/register_request_model.dart';
@@ -122,6 +124,21 @@ class APIService {
       body: jsonEncode(model.toJson()),
     );
     return searchTaskResponseModel(response.body);
+  }
+
+  static Future<DelTaskResponseModel> delTask(DelTaskRequestModel model) async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+
+    var url = Uri.http(Config.apiURL, Config.delTaskAPI);
+
+    var response = await client.post(
+      url,
+      headers: requestHeaders,
+      body: jsonEncode(model.toJson()),
+    );
+    return delTaskResponseModel(response.body);
   }
 
 /*
