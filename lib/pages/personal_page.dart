@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:fridge_app/models/searchTask_request_model.dart';
 import 'package:fridge_app/pages/addTask_page.dart';
 import 'package:fridge_app/pages/work_page.dart';
 import 'package:fridge_app/services/api_service.dart';
@@ -24,22 +25,31 @@ class PersonalPage extends StatefulWidget {
 }
 
 class _PersonalPageState extends State<PersonalPage> {
+  List<dynamic> entries = [];
+  List<dynamic> changeableList = [];
+
+  @override
+  void initState() {
+    SearchTaskRequestModel model = SearchTaskRequestModel(
+      user: GlobalData.userName,
+      search: "personal",
+    );
+    APIService.searchTask(model).then((response) {
+      setState(() {
+        isAPIcallProcess = false;
+      });
+      if (response.error == '' && response.results != null) {
+        entries = response.results;
+        changeableList = entries;
+      } else {
+        print("error");
+      }
+    });
+
+    super.initState();
+  }
+
   int count = 5;
-  static List<String> entries = <String>[
-    'I have a test due and must get my chores done/wash the Testing',
-    'Test Task',
-    'The fitness gram pacer test is a ... nevermind',
-    'wowowowowowowowowoowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowwowowowowowowowowoowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowowow',
-    'B',
-    'C',
-    'A',
-    'B',
-    'C',
-    'A',
-    'B',
-    'C'
-  ];
-  List<String> changeableList = List.from(entries);
 
   GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   String searchValue = '';
@@ -136,15 +146,11 @@ class _PersonalPageState extends State<PersonalPage> {
                       "SEARCH",
                       () {
                         if (validateAndSave()) {
-                          List<String> matchQuery = [];
-                          for (var entry in entries) {
-                            if (entry
-                                .toLowerCase()
-                                .contains(searchValue.toLowerCase())) {
-                              matchQuery.add(entry);
-                              // This is inefficient by a lot. May remove
-                            }
-                          }
+                          List<dynamic> matchQuery = entries
+                              .where((row) => row[0]
+                                  .toLowerCase()
+                                  .contains(searchValue.toLowerCase()))
+                              .toList();
 
                           changeableList = matchQuery;
                           setState(() {
@@ -224,7 +230,7 @@ class _PersonalPageState extends State<PersonalPage> {
                             left: 15,
                           ),
                           child: AutoSizeText(
-                            'Entry ${changeableList[index]}',
+                            '${changeableList[index][0]}',
                             style: TextStyle(
                               color: Colors.white,
                             ),
@@ -234,7 +240,7 @@ class _PersonalPageState extends State<PersonalPage> {
                           ),
                         ),
                         AutoSizeText(
-                          'Due Date: 4/12/23 4:23 PM',
+                          'Due Date: ${changeableList[index][1]}',
                           style: TextStyle(
                             decoration: TextDecoration.underline,
                             fontSize: 10,
@@ -267,7 +273,7 @@ class _PersonalPageState extends State<PersonalPage> {
                                   'Would you like to be reminded when your task is due?'),
                             )) {
                               DateTime dateTimeTEST =
-                                  dateFormat.parse("2023-04-13 00:56:00");
+                                  dateFormat.parse(changeableList[index][1]);
 
                               NotificationService().scheduleNotification(
                                   title: 'Wow',

@@ -8,4 +8,5 @@ class Config {
   static const String addTaskAPI = "/api/addTask";
   static const String sendEmailAPI = "/api/sendEmail";
   static const String resetPasswordAPI = "/api/resetPassword";
+  static const String searchTaskAPI = "/api/searchCategory";
 }
