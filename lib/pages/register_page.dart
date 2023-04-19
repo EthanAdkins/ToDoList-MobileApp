@@ -312,7 +312,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       FormHelper.showSimpleAlertDialog(
                         context,
                         Config.appName,
-                        "Registration Succesfull. Please login to the account.",
+                        "Registration Succesful. Please login to the account.",
                         "OK",
                         () {
                           Navigator.pushNamedAndRemoveUntil(

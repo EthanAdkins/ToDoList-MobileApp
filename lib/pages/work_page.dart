@@ -254,6 +254,30 @@ class _WorkPageState extends State<WorkPage> {
                     )),
                   ),
                   Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color.fromARGB(255, 115, 41, 150),
+                            textStyle: TextStyle(fontSize: 15),
+                            padding: EdgeInsets.zero,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          onPressed: () async {
+                            Navigator.pushNamed(context, "/editTask",
+                                arguments: {
+                                  'Argument': changeableList[index],
+                                  'Category': "Work"
+                                });
+                          },
+                          child: const Icon(Icons.edit, size: 20)),
+                    ),
+                  ),
+                  Padding(
                     padding: const EdgeInsets.only(right: 10, left: 10),
                     child: SizedBox(
                       width: 40,

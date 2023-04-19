@@ -5,6 +5,8 @@ import 'package:fridge_app/models/addTask_request_model.dart';
 import 'package:fridge_app/models/addTask_response_model.dart';
 import 'package:fridge_app/models/delTask_request_model.dart';
 import 'package:fridge_app/models/delTask_response_model.dart';
+import 'package:fridge_app/models/editTask_request_model.dart';
+import 'package:fridge_app/models/editTask_response_model.dart';
 import 'package:fridge_app/models/login_request_model.dart';
 import 'package:fridge_app/models/login_response_model.dart';
 import 'package:fridge_app/models/register_request_model.dart';
@@ -141,6 +143,21 @@ class APIService {
     return delTaskResponseModel(response.body);
   }
 
+  static Future<EditTaskResponseModel> editTask(
+      EditTaskRequestModel model) async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+
+    var url = Uri.http(Config.apiURL, Config.editTaskAPI);
+
+    var response = await client.post(
+      url,
+      headers: requestHeaders,
+      body: jsonEncode(model.toJson()),
+    );
+    return editTaskResponseModel(response.body);
+  }
 /*
   static Future<String> getUserProfile() async {
     var loginDetails = await SharedService.loginDetails();

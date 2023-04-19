@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fridge_app/pages/editTask_page.dart';
 import 'package:fridge_app/pages/login_page.dart';
 import 'package:fridge_app/pages/register_page.dart';
 import 'package:fridge_app/pages/personal_page.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
         '/addTask': (context) => const addTaskPage(),
         '/forgotPassword': (context) => const resetPasswordPage(),
         '/resetPasswordInApp': (context) => const resetPasswordInAppPage(),
+        '/editTask': (context) => const editTaskPage(),
       },
     );
   }
