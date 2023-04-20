@@ -14,7 +14,7 @@ DateTime now = new DateTime.now();
 DateTime dateTime =
     new DateTime(now.year, now.month, now.day, now.hour, now.minute);
 
-DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+DateFormat dateFormat = DateFormat("yyyy-MM-dd'T'HH:mm");
 
 class addTaskPage extends StatefulWidget {
   const addTaskPage({super.key});

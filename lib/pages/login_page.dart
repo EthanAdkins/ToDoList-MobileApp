@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: Alignment.center,
                 child: Image.asset(
                   "assets/images/ToDoListPurple.png",
-                  width: 250,
+                  width: MediaQuery.of(context).size.height / 3,
                   fit: BoxFit.contain,
                 ),
               )
@@ -244,7 +244,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           SizedBox(
-            height: 20,
+            height: 10,
           ),
           Align(
             alignment: Alignment.center,

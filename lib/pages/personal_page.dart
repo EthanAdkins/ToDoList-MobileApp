@@ -19,6 +19,8 @@ import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:fridge_app/config.dart';
 
+DateFormat dateFormat = DateFormat("yyyy-MM-dd'T'HH:mm");
+
 class PersonalPage extends StatefulWidget {
   const PersonalPage({super.key});
 
@@ -244,12 +246,15 @@ class _PersonalPageState extends State<PersonalPage> {
                             maxFontSize: 30,
                           ),
                         ),
-                        AutoSizeText(
-                          'Due Date: ${changeableList[index][1]}',
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            fontSize: 10,
-                            color: Colors.white,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: AutoSizeText(
+                            'Due Date: ${changeableList[index][1]}',
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontSize: 10,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ],
@@ -280,7 +285,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 10, left: 10),
+                    padding: const EdgeInsets.only(right: 5, left: 5),
                     child: SizedBox(
                       width: 40,
                       height: 40,
@@ -294,6 +299,7 @@ class _PersonalPageState extends State<PersonalPage> {
                             ),
                           ),
                           onPressed: () async {
+                            String notifString;
                             // Check here if the date is in the future. Message if now
                             //if (date > or whatever DateTime now = new DateTime.now(); )
                             if (await confirm(
@@ -301,8 +307,10 @@ class _PersonalPageState extends State<PersonalPage> {
                               content: const Text(
                                   'Would you like to be reminded when your task is due?'),
                             )) {
+                              notifString = changeableList[index][1];
+
                               DateTime dateTimeTEST =
-                                  dateFormat.parse(changeableList[index][1]);
+                                  dateFormat.parse(notifString);
 
                               NotificationService().scheduleNotification(
                                   title: 'The Fridge List',

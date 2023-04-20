@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:fridge_app/config.dart';
-import 'package:fridge_app/models/addTask_request_model.dart';
+
 import 'package:fridge_app/models/editTask_request_model.dart';
 import 'package:fridge_app/services/api_service.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
@@ -15,7 +15,7 @@ DateTime now = new DateTime.now();
 DateTime dateTime =
     new DateTime(now.year, now.month, now.day, now.hour, now.minute);
 
-DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+DateFormat dateFormat = DateFormat("yyyy-MM-dd'T'HH:mm");
 
 class editTaskPage extends StatefulWidget {
   const editTaskPage({super.key});
@@ -40,7 +40,7 @@ class _editTaskPageState extends State<editTaskPage> {
   String? task;
   List<String> possibleLists = <String>['Personal', 'School', 'Work'];
 
-  String curList = "Personal";
+  String curList = "";
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +61,12 @@ class _editTaskPageState extends State<editTaskPage> {
   Widget _editTaskUI(BuildContext context) {
     final argument = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
+
     final hours = dateTime.hour.toString().padLeft(2, '0');
     final minutes = dateTime.minute.toString().padLeft(2, '0');
-    curList = argument['Category'];
+    if (curList.isEmpty) {
+      curList = argument['Category'];
+    }
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -113,7 +116,7 @@ class _editTaskPageState extends State<editTaskPage> {
             child: Wrap(children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(top: 13, right: 5),
-                child: Text('New Date:',
+                child: Text('Date:',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 17,
@@ -145,7 +148,7 @@ class _editTaskPageState extends State<editTaskPage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 13, right: 5, left: 10),
-                child: Text('New Date:',
+                child: Text('Time:',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 17,
@@ -174,50 +177,6 @@ class _editTaskPageState extends State<editTaskPage> {
               ),
             ]),
           ),
-          /*
-          Padding(
-            padding: const EdgeInsets.only(left: 30, bottom: 20),
-            child: ElevatedButton(
-              child: Text('${dateTime.month}/${dateTime.day}/${dateTime.year}'),
-              onPressed: () async {
-                final date = await pickDate();
-                if (date == null) return; // pressed "CANCEL"
-                final newDateTime = DateTime(
-                  dateTime.year,
-                  dateTime.month,
-                  dateTime.day,
-                  dateTime.hour,
-                  dateTime.minute,
-                );
-
-                setState(() => dateTime = newDateTime); // pressed "OK"
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: HexColor("#9736C5"),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 30, bottom: 20),
-            child: ElevatedButton(
-              child: Text('$hours:$minutes'),
-              onPressed: () async {
-                final time = await pickTime();
-                if (time == null) return; // pressed "CANCEL"
-                final newDateTime = DateTime(
-                  dateTime.year,
-                  dateTime.month,
-                  dateTime.day,
-                  time.hour,
-                  time.minute,
-                );
-                setState(() => dateTime = newDateTime); // Pressed "OK"
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: HexColor("#9736C5"),
-              ),
-            ),
-          ),*/
           Padding(
             padding: const EdgeInsets.only(left: 20, bottom: 20),
             child: DropdownButton(
