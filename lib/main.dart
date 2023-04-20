@@ -128,14 +128,14 @@ class DrawerCodeOnly extends StatelessWidget {
             },
           ),
           const Divider(color: Colors.black54),
-          ListTile(
+          /*ListTile(
             title: const Text('About Us'),
             onTap: () {
               // Update the state of the app
               // ...
               // Then close the drawer
             },
-          ),
+          ),*/
           ListTile(
             title: const Text('Change Password'),
             onTap: () {
