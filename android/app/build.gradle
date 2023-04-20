@@ -24,8 +24,11 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-
+def versions = [
+    androidDesugaringVersion: '1.1.9'
+]
 android {
+    
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -60,6 +63,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    
 }
 
 flutter {
@@ -68,4 +72,5 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "com.android.tools:desugar_jdk_libs:$versions.androidDesugaringVersion"
 }
