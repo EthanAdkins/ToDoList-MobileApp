@@ -302,23 +302,38 @@ class _PersonalPageState extends State<PersonalPage> {
                             String notifString;
                             // Check here if the date is in the future. Message if now
                             //if (date > or whatever DateTime now = new DateTime.now(); )
-                            if (await confirm(
-                              context,
-                              content: const Text(
-                                  'Would you like to be reminded when your task is due?'),
-                            )) {
-                              notifString = changeableList[index][1];
 
-                              DateTime dateTimeTEST =
-                                  dateFormat.parse(notifString);
+                            DateTime now = new DateTime.now();
+                            notifString = changeableList[index][1];
 
-                              NotificationService().scheduleNotification(
-                                  title: 'The Fridge List',
-                                  body:
-                                      'Your task: "${changeableList[index][0]}" is due!',
-                                  scheduledNotificationDateTime: dateTimeTEST);
+                            DateTime dateTimeTEST =
+                                dateFormat.parse(notifString);
+                            int comparison = dateTimeTEST.compareTo(now);
+                            if (comparison > 0) {
+                              if (await confirm(
+                                context,
+                                content: const Text(
+                                    'Would you like to be reminded when your task is due?'),
+                              )) {
+                                NotificationService().scheduleNotification(
+                                    title: 'The Fridge List',
+                                    body:
+                                        'Your task: "${changeableList[index][0]}" is due!',
+                                    scheduledNotificationDateTime:
+                                        dateTimeTEST);
+                              } else {
+                                return print("not confirm");
+                              }
                             } else {
-                              return print("not confirm");
+                              FormHelper.showSimpleAlertDialog(
+                                context,
+                                Config.appName,
+                                "Due Date Has Already Passed!",
+                                "OK",
+                                () {
+                                  Navigator.pop(context);
+                                },
+                              );
                             }
                           },
                           child:
