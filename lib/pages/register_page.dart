@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:fridge_app/models/emailVerification_request_model.dart';
 import 'package:fridge_app/models/register_request_model.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
@@ -21,7 +22,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   bool isAPIcallProcess = false;
   bool hidePassword = true;
-  bool hidePassword2 = false;
+  bool hidePassword2 = true;
   GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   String? username;
   String? password;
@@ -79,7 +80,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 alignment: Alignment.center,
                 child: Image.asset(
                   "assets/images/ToDoListPurple.png",
-                  width: 250,
+                  width: MediaQuery.of(context).size.height / 3,
                   fit: BoxFit.contain,
                 ),
               )
@@ -312,9 +313,22 @@ class _RegisterPageState extends State<RegisterPage> {
                       FormHelper.showSimpleAlertDialog(
                         context,
                         Config.appName,
-                        "Registration Succesful. Please login to the account.",
+                        "Account created successfully, email verification sent",
                         "OK",
                         () {
+                          setState(() {
+                            isAPIcallProcess = true;
+                          });
+                          EmailVerificationRequestModel model =
+                              EmailVerificationRequestModel(
+                            user: username!,
+                            password: password!,
+                          );
+                          APIService.emailVerification(model).then((response) {
+                            setState(() {
+                              isAPIcallProcess = false;
+                            });
+                          });
                           Navigator.pushNamedAndRemoveUntil(
                             context,
                             '/login',

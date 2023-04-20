@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:fridge_app/config.dart';
+import 'package:fridge_app/models/emailVerification_request_model.dart';
 import 'package:fridge_app/models/login_request_model.dart';
 import 'package:fridge_app/services/api_service.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
@@ -27,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
     GlobalData.id = "";
     GlobalData.userName = "";
     GlobalData.password = "";
-
+    GlobalData.verified = null;
     super.initState();
   }
 
@@ -204,9 +205,35 @@ class _LoginPageState extends State<LoginPage> {
                       isAPIcallProcess = false;
                     });
                     if (response) {
-                      GlobalData.userName = username;
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/personal', (route) => false);
+                      if (GlobalData.verified == true) {
+                        GlobalData.userName = username;
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/personal', (route) => false);
+                      } else {
+                        FormHelper.showSimpleAlertDialog(
+                          context,
+                          Config.appName,
+                          "This account has yet to be verified. Resending email now",
+                          "OK",
+                          () {
+                            setState(() {
+                              isAPIcallProcess = true;
+                            });
+                            EmailVerificationRequestModel model =
+                                EmailVerificationRequestModel(
+                              user: username!,
+                              password: password!,
+                            );
+                            APIService.emailVerification(model)
+                                .then((response) {
+                              setState(() {
+                                isAPIcallProcess = false;
+                              });
+                            });
+                            Navigator.pop(context);
+                          },
+                        );
+                      }
                     } else {
                       FormHelper.showSimpleAlertDialog(
                         context,

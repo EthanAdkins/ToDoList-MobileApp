@@ -11,4 +11,5 @@ class Config {
   static const String searchTaskAPI = "/api/searchCategory";
   static const String delTaskAPI = "/api/delTask";
   static const String editTaskAPI = "api/editTask";
+  static const String emailVerificationAPI = "api/emailVerification";
 }

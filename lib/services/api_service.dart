@@ -7,6 +7,8 @@ import 'package:fridge_app/models/delTask_request_model.dart';
 import 'package:fridge_app/models/delTask_response_model.dart';
 import 'package:fridge_app/models/editTask_request_model.dart';
 import 'package:fridge_app/models/editTask_response_model.dart';
+import 'package:fridge_app/models/emailVerification_request_model.dart';
+import 'package:fridge_app/models/emailVerification_response_model.dart';
 import 'package:fridge_app/models/login_request_model.dart';
 import 'package:fridge_app/models/login_response_model.dart';
 import 'package:fridge_app/models/register_request_model.dart';
@@ -46,6 +48,7 @@ class APIService {
       GlobalData.userName = test['user'];
       GlobalData.password = test['password'];
       GlobalData.email = test['email'];
+      GlobalData.verified = test['verified'];
       // Shared
       // This is sketchy but it works
       await SharedService.setLoginDetails(loginResponseJson(response.body));
@@ -158,6 +161,22 @@ class APIService {
     );
     return editTaskResponseModel(response.body);
   }
+
+  static Future<EmailVerificationResponseModel> emailVerification(
+      EmailVerificationRequestModel model) async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+
+    var url = Uri.http(Config.apiURL, Config.emailVerificationAPI);
+
+    var response = await client.post(
+      url,
+      headers: requestHeaders,
+      body: jsonEncode(model.toJson()),
+    );
+    return emailVerificationResponseModel(response.body);
+  }
 /*
   static Future<String> getUserProfile() async {
     var loginDetails = await SharedService.loginDetails();
@@ -191,4 +210,5 @@ class GlobalData {
   static String? userName = "";
   static String? password = "";
   static String? email = "";
+  static bool? verified = null;
 }

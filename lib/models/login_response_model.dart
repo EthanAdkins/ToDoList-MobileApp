@@ -10,12 +10,14 @@ class LoginResponseModel {
     required this.lastName,
     required this.email,
     required this.error,
+    required this.verified,
   });
   late final String id;
   late final String firstName;
   late final String lastName;
   late final String email;
   late final String error;
+  late final bool verified;
 
   LoginResponseModel.fromJson(Map<String, dynamic> json) {
     if (json['_id'] != -1) {
@@ -27,6 +29,7 @@ class LoginResponseModel {
     lastName = json['lastName'];
     email = json['email'];
     error = json['error'];
+    verified = json['verified'];
   }
 
   Map<String, dynamic> toJson() {
@@ -36,6 +39,7 @@ class LoginResponseModel {
     _data['lastName'] = lastName;
     _data['email'] = email;
     _data['error'] = error;
+    _data['verified'] = verified;
     return _data;
   }
 }

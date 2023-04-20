@@ -159,6 +159,7 @@ class DrawerCodeOnly extends StatelessWidget {
               GlobalData.id = "";
               GlobalData.userName = "";
               GlobalData.password = "";
+              GlobalData.verified = null;
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 '/',
